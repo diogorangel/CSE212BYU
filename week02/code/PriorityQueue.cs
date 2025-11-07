@@ -3,7 +3,7 @@
     private List<PriorityItem> _queue = new();
 
     /// <summary>
-    /// Add a new value to the queue with an associated priority.  The
+    /// Add a new value to the queue with an associated priority. The
     /// node is always added to the back of the queue regardless of 
     /// the priority.
     /// </summary>
@@ -24,14 +24,19 @@
 
         // Find the index of the item with the highest priority to remove
         var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++)
+        // O loop deve ir até _queue.Count (exclusive) para incluir o último elemento.
+        for (int index = 1; index < _queue.Count; index++)
         {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+            // Para respeitar o FIFO (remover o item *mais antigo* se as prioridades forem iguais),
+            // deve-se usar '>' para garantir que o 'highPriorityIndex' só mude
+            // se um item com prioridade *estritamente* maior for encontrado.
+            if (_queue[index].Priority > _queue[highPriorityIndex].Priority)
                 highPriorityIndex = index;
         }
 
         // Remove and return the item with the highest priority
         var value = _queue[highPriorityIndex].Value;
+        _queue.RemoveAt(highPriorityIndex); // Adicionado: deve remover o item.
         return value;
     }
 
