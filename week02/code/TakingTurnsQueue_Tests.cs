@@ -1,4 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+
+// NOTE: A minimal definition of Person is assumed for the tests to run. 
+// public class Person { public string Name { get; set; } public int Turns { get; set; } public Person(string name, int turns) { Name = name; Turns = turns; } }
 
 // TODO Problem 1 - Run test cases and record any defects the test code finds in the comment above the test method.
 // DO NOT MODIFY THE CODE IN THE TESTS in this file, just the comments above the tests. 
@@ -11,40 +16,40 @@ public class TakingTurnsQueueTests
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3) and
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: The logic for decrementing turns and re-enqueuing is wrong. When a person with 1 turn is dequeued, they are not re-enqueued, but their turns should only be decremented after dequeuing. The check should be on the original value. The current check `if (person.Turns > 1)` means a person with 1 turn is *not* re-enqueued (correct) but also a person with 2 turns has their turns decremented and is re-enqueued (correct). The test fails because it expects 10 items but the number of items received is 11 or 12 depending on the `Person` class logic, but primarily due to the infinite turn logic being flawed later. However, with the current logic, the test **passes** because it correctly handles the finite case (n > 1) and exits correctly. **No defect found for this specific finite case test.**
+    // Defect(s) Found: The internal PersonQueue is behaving like a Stack (LIFO) instead of a Queue (FIFO). The code returns 'Sue' (last added) when 'Bob' (first added) is expected. The turn logic in GetNextPerson() was also incorrect for infinite turns (<= 0) and needed to be fixed to pass the `ForeverZero` and `ForeverNegative` tests.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
-        // ... (código do teste)
+// ... (rest of test method remains unchanged)
     }
 
     [TestMethod]
     // Scenario: Create a queue with the following people and turns: Bob (2), Tim (5), Sue (3)
     // After running 5 times, add George with 3 turns. Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
-    // Defect(s) Found: The logic for decrementing turns and re-enqueuing is wrong. No defect found for this specific test case, as the logic handles finite turns > 1 correctly. **No defect found for this specific finite case test.**
+    // Defect(s) Found: The internal PersonQueue is behaving like a Stack (LIFO) instead of a Queue (FIFO). The code returns 'Sue' when 'Bob' is expected (at the end of the run).
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
-        // ... (código do teste)
+// ... (rest of test method remains unchanged)
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever), Sue (3)
+    // Scenario: Create a queue with the following people and turns: Bob (2), Tim (Forever=0), Sue (3)
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
-    // Defect(s) Found: The logic in GetNextPerson() does not correctly identify 0 turns as an infinite number of turns. The check `if (person.Turns > 1)` prevents the person with 0 turns (Tim) from being re-enqueued, causing the test to fail because Tim is only returned once, not multiple times as expected by the result array. The final assertion on `infinitePerson.Turns` also fails because Tim is not present in the queue at the end.
+    // Defect(s) Found: The logic in GetNextPerson() did not correctly treat 0 turns as infinite, causing Tim to be removed. Additionally, the underlying PersonQueue is behaving like a Stack (LIFO).
     public void TestTakingTurnsQueue_ForeverZero()
     {
-        // ... (código do teste)
+// ... (rest of test method remains unchanged)
     }
 
     [TestMethod]
-    // Scenario: Create a queue with the following people and turns: Tim (Forever), Sue (3)
+    // Scenario: Create a queue with the following people and turns: Tim (Forever=-3), Sue (3)
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
-    // Defect(s) Found: The logic in GetNextPerson() does not correctly identify negative turns (-3) as an infinite number of turns. The check `if (person.Turns > 1)` prevents the person with -3 turns (Tim) from being re-enqueued, causing the test to fail because Tim is only returned once, not multiple times as expected by the result array. The final assertion on `infinitePerson.Turns` also fails because Tim is not present in the queue at the end.
+    // Defect(s) Found: The logic in GetNextPerson() did not correctly treat negative turns as infinite, causing Tim to be removed. Additionally, the underlying PersonQueue is behaving like a Stack (LIFO).
     public void TestTakingTurnsQueue_ForeverNegative()
     {
-        // ... (código do teste)
+// ... (rest of test method remains unchanged)
     }
 
     [TestMethod]
@@ -53,6 +58,6 @@ public class TakingTurnsQueueTests
     // Defect(s) Found: **No defect found**. The check for `_people.IsEmpty()` at the beginning of `GetNextPerson()` correctly throws the `InvalidOperationException` with the correct message.
     public void TestTakingTurnsQueue_Empty()
     {
-        // ... (código do teste)
+// ... (rest of test method remains unchanged)
     }
 }
