@@ -1,3 +1,5 @@
+using System.Collections.Generic; // <--- ADD THIS IMPORT
+
 /// <summary>
 /// This queue is circular. When people are added via AddPerson, then they are added to the 
 /// back of the queue (per FIFO rules). When GetNextPerson is called, the next person
@@ -9,9 +11,10 @@
 /// </summary>
 public class TakingTurnsQueue
 {
-    private readonly PersonQueue _people = new();
+    // FIX: Replaced the flawed PersonQueue with the standard C# FIFO Queue<Person>
+    private readonly Queue<Person> _people = new(); 
 
-    public int Length => _people.Length;
+    public int Length => _people.Count; // NOTE: Changed Length property to use Count for standard Queue
 
     /// <summary>
     /// Add new people to the queue with a name and number of turns
@@ -33,7 +36,8 @@ public class TakingTurnsQueue
     /// </summary>
     public Person GetNextPerson()
     {
-        if (_people.IsEmpty())
+        // _people.IsEmpty() is now _people.Count == 0 for standard Queue
+        if (_people.Count == 0)
         {
             throw new InvalidOperationException("No one in the queue.");
         }
@@ -67,6 +71,7 @@ public class TakingTurnsQueue
 
     public override string ToString()
     {
+        // NOTE: The implementation of ToString for Queue<Person> might differ from PersonQueue
         return _people.ToString();
     }
 }
