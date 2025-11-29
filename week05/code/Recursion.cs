@@ -204,6 +204,6 @@ public static class Recursion
 
         // Backtrack: Remove the current position before returning
         currPath.RemoveAt(currPath.Count - 1);
-        results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+        results.Add(currPath.AsString()); 
     }
 }
