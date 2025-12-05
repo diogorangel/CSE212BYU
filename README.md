@@ -9,6 +9,9 @@ To ensure that you are learning the concepts of the course, any code that you ad
 command to test and take the results @diogorangel:
 dotnet test --results-directory "TestResults" --logger "trx"
 
+Command to take the txt results : dotnet test > test_output.txt
+Command to show just the results on console : dotnet test
+
 The default branch has been renamed!
 main is now named master
 
